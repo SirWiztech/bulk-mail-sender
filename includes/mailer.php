@@ -9,8 +9,11 @@ use PHPMailer\PHPMailer\Exception as PHPMailerException;
 
 /**
  * Send a single email. Returns [true, null] on success or [false, errorMessage] on failure.
+ *
+ * @param array $attachments Optional list of files to attach, each:
+ *                           ['path' => absolute path on disk, 'name' => name shown to the recipient]
  */
-function send_mail(string $toEmail, string $toName, string $subject, string $htmlBody): array {
+function send_mail(string $toEmail, string $toName, string $subject, string $htmlBody, array $attachments = []): array {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -29,6 +32,12 @@ function send_mail(string $toEmail, string $toName, string $subject, string $htm
         $mail->Subject = $subject;
         $mail->Body    = $htmlBody;
         $mail->AltBody = trim(strip_tags(preg_replace('/<br\s*\/?>/i', "\n", $htmlBody)));
+
+        foreach ($attachments as $att) {
+            if (!empty($att['path']) && is_file($att['path'])) {
+                $mail->addAttachment($att['path'], $att['name'] ?? basename($att['path']));
+            }
+        }
 
         $mail->send();
         return [true, null];

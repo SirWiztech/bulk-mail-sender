@@ -63,6 +63,30 @@ $failedRows = $pdo->prepare("
 $failedRows->execute([$id]);
 $failed = $failedRows->fetchAll();
 
+// Attachments on this campaign
+$attStmt = $pdo->prepare("SELECT * FROM campaign_attachments WHERE campaign_id=? ORDER BY id");
+$attStmt->execute([$id]);
+$attachments = $attStmt->fetchAll();
+
+// Remove an attachment (draft campaigns only)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'remove_attachment') {
+    csrf_check();
+    if ($campaign['status'] !== 'draft') {
+        flash('Attachments can only be changed while the campaign is a draft.', 'error');
+    } else {
+        $attId = (int)($_POST['attachment_id'] ?? 0);
+        $del = $pdo->prepare("SELECT * FROM campaign_attachments WHERE id=? AND campaign_id=?");
+        $del->execute([$attId, $id]);
+        if ($row = $del->fetch()) {
+            if (is_file($row['path'])) @unlink($row['path']);
+            $pdo->prepare("DELETE FROM campaign_attachments WHERE id=?")->execute([$attId]);
+            flash('Attachment removed.');
+        }
+    }
+    header('Location: campaign_view.php?id=' . $id);
+    exit;
+}
+
 require __DIR__ . '/includes/layout_top.php';
 ?>
 <h1><?= h($campaign['name']) ?></h1>
@@ -71,6 +95,25 @@ require __DIR__ . '/includes/layout_top.php';
 <div class="card">
   <h2 style="margin-top:0">Preview</h2>
   <p><strong>Subject:</strong> <?= h($campaign['subject']) ?></p>
+  <?php if ($attachments): ?>
+    <p><strong>Attachments:</strong></p>
+    <ul style="margin-top:0">
+      <?php foreach ($attachments as $a): ?>
+        <li>
+          <?= h($a['filename']) ?>
+          <span class="help">(<?= round($a['size'] / 1024, 1) ?> KB)</span>
+          <?php if ($campaign['status'] === 'draft'): ?>
+            <form method="post" style="display:inline" onsubmit="return confirm('Remove this attachment?');">
+              <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+              <input type="hidden" name="action" value="remove_attachment">
+              <input type="hidden" name="attachment_id" value="<?= (int)$a['id'] ?>">
+              <button class="btn danger" style="margin:0;padding:2px 8px;font-size:12px" type="submit">Remove</button>
+            </form>
+          <?php endif; ?>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
   <div style="border:1px solid var(--border); border-radius:6px; padding:16px; background:#fafbff;">
     <?= $campaign['body_html'] ?>
   </div>

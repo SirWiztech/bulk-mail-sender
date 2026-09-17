@@ -41,6 +41,16 @@ if ($campaign['status'] !== 'sending') {
     exit;
 }
 
+// Load campaign attachments once (same files sent with every email in the campaign)
+$attachments = [];
+$attStmt = $pdo->prepare("SELECT filename, path FROM campaign_attachments WHERE campaign_id=?");
+$attStmt->execute([$campaignId]);
+foreach ($attStmt->fetchAll() as $a) {
+    if (is_file($a['path'])) {
+        $attachments[] = ['path' => $a['path'], 'name' => $a['filename']];
+    }
+}
+
 // Pull one batch of pending sends
 $batch = $pdo->prepare("
     SELECT s.id AS send_id, c.* FROM campaign_sends s
@@ -65,7 +75,7 @@ foreach ($rows as $contact) {
     $subject = render_template($campaign['subject'], $contact);
     $body = render_template($campaign['body_html'], $contact);
 
-    [$ok, $err] = send_mail($contact['email'], $contact['name'], $subject, $body);
+    [$ok, $err] = send_mail($contact['email'], $contact['name'], $subject, $body, $attachments);
 
     if ($ok) {
         $updateSent->execute([$contact['send_id']]);

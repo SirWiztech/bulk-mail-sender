@@ -20,6 +20,11 @@ define('MAIL_REPLY_TO', 'chiamakachidera8@gmail.com');
 define('BATCH_SIZE', 20);          // emails sent per batch request
 define('BATCH_DELAY_MS', 0);       // extra delay (ms) between individual sends inside a batch (0 = none)
 
+// ---- Campaign attachments ----
+define('MAX_ATTACHMENTS', 5);                          // max files per campaign
+define('MAX_ATTACHMENT_SIZE', 10 * 1024 * 1024);       // max size per file (bytes; 10 MB)
+define('ATTACHMENT_MIME_WHITELIST', 'pdf,doc,docx,xls,xlsx,ppt,pptx,csv,txt,zip,jpg,jpeg,png,gif'); // allowed extensions
+
 // ---- Security ----
 // Random secret used to sign unsubscribe tokens. CHANGE THIS to your own random string.
 define('APP_SECRET', 'change-this-to-a-long-random-string-1234567890');
