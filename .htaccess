@@ -1,0 +1,5 @@
+# Basic hardening for Apache hosting
+<FilesMatch "\.(db|sqlite)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes

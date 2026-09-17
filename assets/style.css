@@ -1,0 +1,112 @@
+:root {
+  --bg: #f5f6fa;
+  --sidebar: #1f2333;
+  --sidebar-active: #2d3350;
+  --accent: #4f6df5;
+  --accent-dark: #3a54d6;
+  --text: #23263a;
+  --muted: #767b91;
+  --border: #e3e5ec;
+  --danger: #e5484d;
+  --success: #1a9e5c;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+a { color: var(--accent); text-decoration: none; }
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px;
+  background: var(--sidebar);
+  color: #cfd3ea;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+.sidebar .brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  padding: 0 20px 20px;
+}
+.sidebar a {
+  padding: 12px 20px;
+  color: #cfd3ea;
+  font-size: 14px;
+}
+.sidebar a:hover { background: var(--sidebar-active); }
+.sidebar a.active { background: var(--accent); color: #fff; }
+.sidebar a.logout { margin-top: auto; color: #ff9d9d; }
+.content { flex: 1; padding: 30px 40px; max-width: 1100px; }
+h1 { font-size: 24px; margin-bottom: 4px; }
+h2 { font-size: 18px; margin-top: 30px; }
+.subtitle { color: var(--muted); margin-bottom: 24px; }
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.stat-grid { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+.stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  min-width: 150px;
+}
+.stat .num { font-size: 28px; font-weight: 700; }
+.stat .label { color: var(--muted); font-size: 13px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+tr:hover td { background: #fafbff; }
+input[type=text], input[type=email], input[type=password], input[type=number], textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  margin-top: 4px;
+}
+label { font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-top: 14px; }
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+}
+.btn:hover { background: var(--accent-dark); }
+.btn.secondary { background: #eceefc; color: var(--accent-dark); }
+.btn.danger { background: var(--danger); }
+.badge { padding: 3px 9px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge.subscribed { background: #e4f8ee; color: var(--success); }
+.badge.unsubscribed { background: #fdeaea; color: var(--danger); }
+.badge.bounced { background: #fdf1e0; color: #b9770e; }
+.badge.draft { background: #eceefc; color: var(--accent-dark); }
+.badge.sending { background: #fdf1e0; color: #b9770e; }
+.badge.completed { background: #e4f8ee; color: var(--success); }
+.badge.paused { background: #f0f0f0; color: var(--muted); }
+.flash { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; }
+.flash-success { background: #e4f8ee; color: var(--success); }
+.flash-error { background: #fdeaea; color: var(--danger); }
+.help { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.progress-outer { background: #eee; border-radius: 8px; overflow: hidden; height: 22px; margin-top: 10px; }
+.progress-inner { background: var(--accent); height: 100%; text-align: center; color: #fff; font-size: 12px; line-height: 22px; transition: width .3s; }
+.login-wrap { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+.login-box { background:#fff; padding: 40px; border-radius: 10px; width: 320px; box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+.tag-hint code { background:#f0f1f8; padding:2px 6px; border-radius:4px; font-size:12px; }
